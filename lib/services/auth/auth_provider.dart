@@ -1,18 +1,16 @@
 import 'package:mycounter/services/auth/auth_user.dart';
 
 abstract class AuthProvider {
-  Future<void> inialize();
-
+  Future<void> initialize();
   AuthUser? get currentUser;
   Future<AuthUser> logIn({
     required String email,
     required String password,
   });
-  Future<AuthUser> cresteUser({
+  Future<AuthUser> createUser({
     required String email,
     required String password,
   });
   Future<void> logOut();
   Future<void> sendEmailVerification();
 }
-

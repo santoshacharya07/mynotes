@@ -16,9 +16,9 @@ void main() {
       ),
       home: const HomePage(),
       routes: {
-        notesRoute: (context) => const NotesView(),
         loginRoute: (context) => const LoginView(),
         registerRoute: (context) => const RegisterView(),
+        notesRoute: (context) => const NotesView(),
         verifyEmailRoute: (context) => const VerifyEmailView(),
       },
     ),
@@ -26,16 +26,16 @@ void main() {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: AuthService.firebasae().inialize(),
+      future: AuthService.firebase().initialize(),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
-            final user = AuthService.firebasae().currentUser;
+            final user = AuthService.firebase().currentUser;
             if (user != null) {
               if (user.isEmailVerified) {
                 return const NotesView();

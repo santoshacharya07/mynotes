@@ -6,14 +6,14 @@ class AuthService implements AuthProvider {
   final AuthProvider provider;
   const AuthService(this.provider);
 
-  factory AuthService.firebasae() => AuthService(FirebaseAuthProvider());
+  factory AuthService.firebase() => AuthService(FirebaseAuthProvider());
 
   @override
-  Future<AuthUser> cresteUser({
+  Future<AuthUser> createUser({
     required String email,
     required String password,
   }) =>
-      provider.cresteUser(
+      provider.createUser(
         email: email,
         password: password,
       );
@@ -38,5 +38,5 @@ class AuthService implements AuthProvider {
   Future<void> sendEmailVerification() => provider.sendEmailVerification();
 
   @override
-  Future<void> inialize() => provider.inialize();
+  Future<void> initialize() => provider.initialize();
 }

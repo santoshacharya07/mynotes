@@ -5,10 +5,10 @@ import 'package:mycounter/services/auth/auth_service.dart';
 import 'package:mycounter/utilities/show_error_dialog.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+  const RegisterView({Key? key}) : super(key: key);
 
   @override
-  State<RegisterView> createState() => _RegisterViewState();
+  _RegisterViewState createState() => _RegisterViewState();
 }
 
 class _RegisterViewState extends State<RegisterView> {
@@ -19,7 +19,6 @@ class _RegisterViewState extends State<RegisterView> {
   void initState() {
     _email = TextEditingController();
     _password = TextEditingController();
-
     super.initState();
   }
 
@@ -40,59 +39,66 @@ class _RegisterViewState extends State<RegisterView> {
         children: [
           TextField(
             controller: _email,
-            decoration: const InputDecoration(
-              hintText: "Enter Your Email",
-            ),
             enableSuggestions: false,
             autocorrect: false,
             keyboardType: TextInputType.emailAddress,
+            decoration: const InputDecoration(
+              hintText: 'Enter your email here',
+            ),
           ),
           TextField(
             controller: _password,
-            decoration:
-                const InputDecoration(hintText: "Enter Your Password!!!!"),
             obscureText: true,
             enableSuggestions: false,
             autocorrect: false,
+            decoration: const InputDecoration(
+              hintText: 'Enter your password here',
+            ),
           ),
           TextButton(
             onPressed: () async {
               final email = _email.text;
               final password = _password.text;
               try {
-                AuthService.firebasae().cresteUser(
+                await AuthService.firebase().createUser(
                   email: email,
                   password: password,
                 );
-                AuthService.firebasae().sendEmailVerification();
+                AuthService.firebase().sendEmailVerification();
                 Navigator.of(context).pushNamed(verifyEmailRoute);
               } on WeakPasswordAuthException {
                 await showErrorDialog(
                   context,
-                  'Weak Password',
+                  'Weak password',
                 );
-              } on EmailAlreadyInUsedAuthException {
+              } on EmailAlreadyInUseAuthException {
                 await showErrorDialog(
                   context,
-                  'Email Already in Used',
+                  'Email is already in use',
                 );
               } on InvalidEmailAuthException {
                 await showErrorDialog(
                   context,
-                  'This Is Invalid Email',
+                  'This is an invalid email address',
                 );
               } on GenericAuthException {
-                await showErrorDialog(context, 'Failed to Register');
+                await showErrorDialog(
+                  context,
+                  'Failed to register',
+                );
               }
             },
             child: const Text('Register'),
           ),
           TextButton(
-              onPressed: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    loginRoute, (Route<dynamic> route) => false);
-              },
-              child: const Text('Already Register? Login here'))
+            onPressed: () {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                loginRoute,
+                (route) => false,
+              );
+            },
+            child: const Text('Already registered? Login here!'),
+          )
         ],
       ),
     );

@@ -8,7 +8,14 @@ import 'package:firebase_auth/firebase_auth.dart'
 
 class FirebaseAuthProvider implements AuthProvider {
   @override
-  Future<AuthUser> cresteUser({
+  Future<void> initialize() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+
+  @override
+  Future<AuthUser> createUser({
     required String email,
     required String password,
   }) async {
@@ -27,7 +34,7 @@ class FirebaseAuthProvider implements AuthProvider {
       if (e.code == 'weak-password') {
         throw WeakPasswordAuthException();
       } else if (e.code == 'email-already-in-use') {
-        throw EmailAlreadyInUsedAuthException();
+        throw EmailAlreadyInUseAuthException();
       } else if (e.code == 'invalid-email') {
         throw InvalidEmailAuthException();
       } else {
@@ -68,7 +75,7 @@ class FirebaseAuthProvider implements AuthProvider {
       if (e.code == 'user-not-found') {
         throw UserNotFoundAuthException();
       } else if (e.code == 'wrong-password') {
-        throw WeakPasswordAuthException();
+        throw WrongPasswordAuthException();
       } else {
         throw GenericAuthException();
       }
@@ -95,12 +102,5 @@ class FirebaseAuthProvider implements AuthProvider {
     } else {
       throw UserNotLoggedInAuthException();
     }
-  }
-
-  @override
-  Future<void> inialize() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
   }
 }
