@@ -34,10 +34,11 @@ class _NotesViewState extends State<NotesView> {
         title: const Text('Your Notes'),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(newNoteRoute);
-              },
-              icon: const Icon(Icons.add)),
+            onPressed: () {
+              Navigator.of(context).pushNamed(newNoteRoute);
+            },
+            icon: const Icon(Icons.add),
+          ),
           PopupMenuButton<MenuAction>(
             onSelected: (value) async {
               switch (value) {
@@ -45,7 +46,6 @@ class _NotesViewState extends State<NotesView> {
                   final shouldLogout = await showLogOutDialog(context);
                   if (shouldLogout) {
                     await AuthService.firebase().logOut();
-                    if (!mounted) return;
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       loginRoute,
                       (_) => false,
@@ -74,6 +74,7 @@ class _NotesViewState extends State<NotesView> {
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
+                    case ConnectionState.active:
                       return const Text('Waiting for all notes...');
                     default:
                       return const CircularProgressIndicator();
